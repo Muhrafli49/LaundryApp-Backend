@@ -21,6 +21,8 @@ const routeOrderExpress = require("./routes/Order/OrderExpress");
 const routeOrderReguler = require("./routes/Order/OrderReguler");
 // import routes order setrika
 const routeOrderSetrika = require("./routes/Order/OrderSetrika");
+// import routes pengajuan barang
+const routePengajuanBarang = require("./routes/Pengajuan/PengajuanBarang");
 
 
 const corsOptions = {
@@ -55,6 +57,9 @@ app.use('/order_reg', routeOrderReguler);
 
 // Order Paket Setrika
 app.use('/order_setrika', routeOrderSetrika);
+
+// Pengajuan Barang
+app.use('/pengajuan', routePengajuanBarang);
 
 // Koneksi ke database
 connectionToDb();
