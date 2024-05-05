@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
+    nama: {
+        type: String,
+        required: true
+    },
     username: {
         type: String,
         required: true
@@ -12,9 +16,6 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-    role: {
-        type: String,
     },
 }, { timestamps: true });
 UserSchema.methods.toJSON = function () {

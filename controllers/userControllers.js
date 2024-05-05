@@ -4,37 +4,54 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jsonwebtoken = require('jsonwebtoken');
 
-// registrasi
+// Registrasi pengguna
 exports.registrasi = async (req, res) => {
-    const {username, email, password, role} = req.body;
+    const { nama, username, email, password } = req.body;
 
-    // validasi email
-    const emailUser = await User.findOne({ email });
-    if (emailUser) {
-        return res.status(400).json({ message: 'Email sudah terdaftar' });
+    try {
+        // Validasi email
+        const emailUser = await User.findOne({ email });
+        if (emailUser) {
+            return res.status(400).json({
+                status: false,
+                message: 'Email sudah terdaftar'
+            });
+        }
+
+        // Validasi username
+        const usernameUser = await User.findOne({ username });
+        if (usernameUser) {
+            return res.status(400).json({
+                status: false,
+                message: 'Username sudah terdaftar'
+            });
+        }
+
+        // Buat objek pengguna baru
+        const user = new User({
+            nama,
+            username,
+            email,
+            password: await bcrypt.hash(password, 10)
+        });
+
+        // Simpan pengguna ke database
+        await user.save();
+
+        return res.status(201).json({
+            status: true,
+            message: 'Registrasi Berhasil'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Terjadi kesalahan saat registrasi pengguna'
+        });
     }
-    // validasi username
-    const usernameUser = await User.findOne({ username });
-    if (usernameUser) {
-        return res.status(400).json({ message: 'Username sudah terdaftar' });
-    }
-
-    const user = new User({
-        username,
-        email,
-        password : await bcrypt.hash(password, 10),
-        role
-    })
-    await user.save();
-
-    return res.status(201).json({ 
-        message: 'Registrasi Berhasil',
-    });
-    
 };
 
-// login
-
+// Fungsi login
 exports.login = async (req, res) => {
     const { username, password } = req.body;
 
@@ -42,30 +59,32 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ $or: [{ username }, { email: username }] });
 
         if (!user) {
-            return res.status(401).json({ message: 'Username atau email tidak ditemukan' });
+            return res.status(401).json({
+                false: false,
+                message: 'Username atau email tidak ditemukan' 
+            });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
-            return res.status(401).json({ message: 'Password tidak valid' });
+            return res.status(401).json({ 
+                false: false,
+                message: 'Password tidak valid' 
+            });
         }
 
         const data = {
             _id: user._id,
-            username: user.username,
-            role: user.role
+            nama: user.nama, // Tambahkan properti nama di sini
+            username: user.username
         };
 
         const token = jsonwebtoken.sign(data, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         return res.status(200).json({
             message: 'Login Berhasil',
-            user: {
-                _id: user._id,
-                username: user.username,
-                role: user.role,
-            },
+            user: data, // Gunakan objek data yang sudah termasuk properti nama
             token
         });
     } catch (error) {
@@ -74,10 +93,21 @@ exports.login = async (req, res) => {
     }
 };
 
+
+// Dapatkan data pengguna
 exports.getUser = async (req, res) => {
-    const user = await User.findOne({ _id: req._id });
-    return res.status(200).json({
-        message: "Behasil mendapatkan data pengguna",
-        data: user
-    })
-}
+    try {
+        const user = await User.findOne({ _id: req._id });
+        return res.status(200).json({
+            status: true,
+            message: "Berhasil mendapatkan data pengguna",
+            data: user
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Terjadi kesalahan saat mengambil data pengguna'
+        });
+    }
+};
