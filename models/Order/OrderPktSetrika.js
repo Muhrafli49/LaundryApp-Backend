@@ -31,7 +31,7 @@ const OrderPktSetrikaSchema = new mongoose.Schema({
         required: true
     },
     waktuKerjaStr: {
-        type: Number,
+        type: String,
         required: true
     },
     tglOrderStr: {

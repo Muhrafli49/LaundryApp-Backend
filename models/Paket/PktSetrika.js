@@ -9,7 +9,7 @@ const PktSetrikaSchema = new mongoose.Schema({
         type: String,
     },
     waktuKerja: {
-        type: Number,
+        type: String,
         required: true
     },
     harga: {

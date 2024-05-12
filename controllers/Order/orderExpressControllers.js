@@ -67,7 +67,6 @@ exports.createOrderPktExpress = async (req, res) => {
 
 
 // Controller untuk menampilkan order paket express berdasarkan ID
-// Controller untuk menampilkan order paket express berdasarkan ID
 exports.getOrderPktExpressById = async (req, res) => {
     try {
         const orderPktExpress = await OrderPktExpress.findById(req.params.id);

@@ -56,7 +56,7 @@ app.use('/order_exp', routeOrderExpress);
 app.use('/order_reg', routeOrderReguler);
 
 // Order Paket Setrika
-app.use('/order_setrika', routeOrderSetrika);
+app.use('/order_str', routeOrderSetrika);
 
 // Pengajuan Barang
 app.use('/pengajuan', routePengajuanBarang);
