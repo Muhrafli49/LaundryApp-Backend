@@ -56,40 +56,49 @@ exports.login = async (req, res) => {
     const { username, password } = req.body;
 
     try {
+        // Mencari pengguna berdasarkan username atau email
         const user = await User.findOne({ $or: [{ username }, { email: username }] });
 
         if (!user) {
             return res.status(401).json({
-                false: false,
-                message: 'Username atau email tidak ditemukan' 
+                success: false,
+                message: 'Username atau email tidak ditemukan'
             });
         }
 
+        // Memeriksa kecocokan password
         const passwordMatch = await bcrypt.compare(password, user.password);
 
         if (!passwordMatch) {
-            return res.status(401).json({ 
-                false: false,
-                message: 'Password tidak valid' 
+            return res.status(401).json({
+                success: false,
+                message: 'Password tidak valid'
             });
         }
 
+        // Mengambil data pengguna termasuk role
         const data = {
             _id: user._id,
-            nama: user.nama, // Tambahkan properti nama di sini
-            username: user.username
+            nama: user.nama,
+            username: user.username,
+            role: user.role // Tambahkan role ke data yang dikirimkan
         };
 
+        // Membuat token JWT
         const token = jsonwebtoken.sign(data, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         return res.status(200).json({
+            success: true,
             message: 'Login Berhasil',
-            user: data, // Gunakan objek data yang sudah termasuk properti nama
+            user: data, // Mengirim data pengguna termasuk role
             token
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Terjadi kesalahan saat proses login' });
+        return res.status(500).json({
+            success: false,
+            message: 'Terjadi kesalahan saat proses login'
+        });
     }
 };
 
@@ -108,6 +117,24 @@ exports.getUser = async (req, res) => {
         return res.status(500).json({
             status: false,
             message: 'Terjadi kesalahan saat mengambil data pengguna'
+        });
+    }
+};
+
+// Mendapatkan data seluruh user
+exports.getAllUser = async (req, res) => {
+    try {
+        const user = await User.find();
+        return res.status(200).json({
+            status: true,
+            message: "Berhasil mendapatkan data seluruh user",
+            data: user
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Terjadi kesalahan saat mengambil data user'
         });
     }
 };

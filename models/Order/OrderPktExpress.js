@@ -50,6 +50,11 @@ const OrderPktExpressSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    status: {
+        type: Boolean,
+        enum: [true, false],
+        default: false
+    },
 }, { timestamps: true });
 
 // Middleware sebelum menyimpan data

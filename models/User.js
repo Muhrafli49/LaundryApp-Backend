@@ -17,14 +17,16 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    role: {
+        type: String,
+        default: "pegawai"
+    }
 }, { timestamps: true });
+
 UserSchema.methods.toJSON = function () {
-        const { __v, ...object } = this.toObject();
-        object._id = object._id.toString();
-        return object;
-    };
+    const { __v, ...object } = this.toObject();
+    object._id = object._id.toString();
+    return object;
+};
 
 module.exports = mongoose.model('User', UserSchema);
-
-
-
