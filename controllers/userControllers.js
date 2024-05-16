@@ -138,3 +138,72 @@ exports.getAllUser = async (req, res) => {
         });
     }
 };
+
+// Controller untuk mengupdate data user berdasarkan ID
+exports.updateUser = async (req, res) => {
+    try {
+        const { id } = req.params; // Ambil ID user dari URL
+        const { nama, username, email, password } = req.body;
+
+        // Cek apakah user dengan ID tersebut ada dalam database
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({
+                status: false,
+                message: 'User tidak ditemukan'
+            });
+        }
+
+        // Jika username diubah, periksa apakah username baru sudah digunakan oleh pengguna lain
+        if (username !== user.username) {
+            const existingUser = await User.findOne({ $or: [{ username }, { email: username }] });
+            if (existingUser && existingUser._id.toString() !== id) {
+                return res.status(400).json({
+                    status: false,
+                    message: 'Username atau Email sudah digunakan oleh pengguna lain'
+                });
+            }
+        }
+
+        // Update data user
+        user.nama = nama;
+        user.username = username;
+        user.email = email;
+        user.password = await bcrypt.hash(password, 10); // Hash password baru
+
+        // Simpan perubahan
+        await user.save();
+
+        return res.status(200).json({
+            status: true,
+            message: 'Data user berhasil diperbarui'
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Terjadi kesalahan saat mengupdate data user'
+        });
+    }
+};
+
+// Controller untuk menghapus data user berdasarkan ID
+exports.deleteUserById = async (req, res) => {
+    try {
+        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        if (!deletedUser) {
+            return res.status(404).json({ 
+                status: false, 
+                message: 'User tidak ditemukan' 
+            });
+        }
+        res.status(200).json({
+            status: true,
+            message: 'User berhasil dihapus',
+            data: deletedUser
+        });
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message });
+    }
+};
+
