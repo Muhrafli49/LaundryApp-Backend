@@ -145,6 +145,14 @@ exports.updateUser = async (req, res) => {
         const { id } = req.params; // Ambil ID user dari URL
         const { nama, username, email, password } = req.body;
 
+        // Validasi panjang password
+        if (password && password.length < 6) {
+            return res.status(400).json({
+                status: false,
+                message: 'Password harus memiliki panjang minimal 6 karakter'
+            });
+        }
+
         // Cek apakah user dengan ID tersebut ada dalam database
         const user = await User.findById(id);
         if (!user) {
@@ -154,22 +162,28 @@ exports.updateUser = async (req, res) => {
             });
         }
 
-        // Jika username diubah, periksa apakah username baru sudah digunakan oleh pengguna lain
-        if (username !== user.username) {
-            const existingUser = await User.findOne({ $or: [{ username }, { email: username }] });
-            if (existingUser && existingUser._id.toString() !== id) {
-                return res.status(400).json({
-                    status: false,
-                    message: 'Username atau Email sudah digunakan oleh pengguna lain'
-                });
-            }
+        // Jika username atau email diubah, periksa apakah sudah digunakan oleh pengguna lain
+        const existingUser = await User.findOne({
+            $or: [{ username }, { email }],
+            _id: { $ne: id } // Pastikan tidak memeriksa user yang sedang di-update
+        });
+
+        if (existingUser) {
+            return res.status(400).json({
+                status: false,
+                message: 'Username atau Email sudah digunakan oleh pengguna lain'
+            });
         }
 
         // Update data user
         user.nama = nama;
         user.username = username;
         user.email = email;
-        user.password = await bcrypt.hash(password, 10); // Hash password baru
+
+        // Jika password diubah, hash password baru
+        if (password) {
+            user.password = await bcrypt.hash(password, 10);
+        }
 
         // Simpan perubahan
         await user.save();
@@ -204,6 +218,30 @@ exports.deleteUserById = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ status: false, message: error.message });
+    }
+};
+
+// Controller mendapatkan data pengguna by id
+exports.getUserById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({
+                status: false,
+                message: 'User tidak ditemukan'
+            });
+        }
+        return res.status(200).json({
+            status: true,
+            message: 'Berhasil mendapatkan data pengguna',
+            data: user
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            status: false,
+            message: 'Terjadi kesalahan saat mengambil data pengguna'
+        });
     }
 };
 

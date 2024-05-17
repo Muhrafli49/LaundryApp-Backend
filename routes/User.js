@@ -21,4 +21,7 @@ router.put("/user/edit/:id", userController.updateUser );
 // route untuk menghapus data user berdasarkan id
 router.delete('/user/delete/:id', userController.deleteUserById);
 
+// route untuk mendaatkan user berdasarkan id
+router.get('/user/:id', userController.getUserById);
+
 module.exports = router;
