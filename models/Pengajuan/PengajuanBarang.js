@@ -26,6 +26,11 @@ const PengajuanBarangSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    status: {
+        type: Boolean,
+        enum: [true, false],
+        default: false
+    },
 }, { timestamps: true });
 
 
