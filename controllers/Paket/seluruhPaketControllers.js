@@ -2,6 +2,7 @@ const PaketExpress = require('../../models/Paket/PktExpress');
 const PaketReguler = require('../../models/Paket/PktReguler');
 const PaketSetrika = require('../../models/Paket/PktSetrika');
 
+// Menghitung seluruh jumlah paket yang tersedia
 exports.getTotalPaket = async (req, res) => {
     try {
         const expressCount = await PaketExpress.countDocuments();
@@ -23,3 +24,20 @@ exports.getTotalPaket = async (req, res) => {
         });
     }
 };
+
+exports.getOrderById = async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+        res.json(order);
+    } catch (error) {
+        res.status(500).json({ message: 'Server Error', error });
+    }
+};
+
+
+// Mendapatkan Id orderan untuk melakukan cetak invoice
+
+

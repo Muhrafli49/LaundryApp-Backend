@@ -25,6 +25,8 @@ const routeOrderSetrika = require("./routes/Order/OrderSetrika");
 const routePengajuanBarang = require("./routes/Pengajuan/PengajuanBarang");
 // import routes seluruh paket yang tersedia
 const routeSeluruhPaket = require("./routes/Paket/SeluruhPaket");
+// import routes seluruh order yang tersedia
+const routeSeluruhOrder = require("./routes/Order/SeluruhOrder");
 
 
 const corsOptions = {
@@ -64,6 +66,8 @@ app.use('/order_str', routeOrderSetrika);
 app.use('/pengajuan', routePengajuanBarang);
 
 app.use('/jumlah', routeSeluruhPaket);
+
+app.use('/invoice', routeSeluruhOrder);
 
 // Koneksi ke database
 connectionToDb();

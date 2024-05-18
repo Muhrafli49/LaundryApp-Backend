@@ -49,6 +49,7 @@ exports.registrasi = async (req, res) => {
             message: 'Terjadi kesalahan saat registrasi pengguna'
         });
     }
+    
 };
 
 // Fungsi login
