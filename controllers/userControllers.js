@@ -246,3 +246,20 @@ exports.getUserById = async (req, res) => {
     }
 };
 
+exports.getTotalPegawai = async (req, res) => {
+    try {
+        const pegawaiCount = await User.countDocuments({ role: { $ne: 'admin' } });
+
+        res.json({
+            success: true,
+            message: 'Total Pegawai Berhasil Dihitung',
+            data: pegawaiCount
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching total pegawai',
+            error: error.message
+        });
+    }
+};

@@ -24,4 +24,7 @@ router.delete('/user/delete/:id', userController.deleteUserById);
 // route untuk mendaatkan user berdasarkan id
 router.get('/user/:id', userController.getUserById);
 
+// route mendapatkan jumlah pegawai
+router.get('/total_pegawai', userController.getTotalPegawai)
+
 module.exports = router;

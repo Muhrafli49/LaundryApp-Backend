@@ -141,3 +141,20 @@ exports.deletePengajuanBarangById = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+
+// Controller untuk menjumlahkan semua pengajuan barang 
+exports.countPengajuanBarang = async (req, res) => {
+    try {
+        const count = await PengajuanBarang.countDocuments({ status: false });
+
+        res.status(200).json({
+            success: true,
+            message: 'Jumlah pengajuan barang berhasil dihitung',
+            count: count
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+

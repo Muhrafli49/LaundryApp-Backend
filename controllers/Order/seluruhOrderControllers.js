@@ -30,3 +30,25 @@ exports.getOrderById = async (req, res) => {
         res.status(500).json({ message: 'Server Error', error });
     }
 };
+
+exports.getTotalOrder = async (req, res) => {
+    try {
+        const expressCount = await OrderExpress.countDocuments();
+        const regulerCount = await OrderReguler.countDocuments();
+        const setrikaCount = await OrderSetrika.countDocuments();
+
+        res.json({
+            success: true, 
+            message: 'Total Orderan setiap paket',
+            totalExp: expressCount,
+            totalReg: regulerCount,
+            totalStr: setrikaCount,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching total paket',
+            error: error.message
+        });
+    }
+};

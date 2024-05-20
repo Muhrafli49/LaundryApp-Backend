@@ -23,7 +23,7 @@ const PengajuanBarangSchema = new mongoose.Schema({
         required: true
     },
     totalHarga: {
-        type: String,
+        type: Number,
         required: true
     },
     status: {

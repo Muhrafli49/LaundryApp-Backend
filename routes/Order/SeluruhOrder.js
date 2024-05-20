@@ -4,4 +4,6 @@ const seluruhOrderControllers = require('../../controllers/Order/seluruhOrderCon
 
 router.get('/:type/:id', seluruhOrderControllers.getOrderById);
 
+router.get('/total_order', seluruhOrderControllers.getTotalOrder);
+
 module.exports = router;

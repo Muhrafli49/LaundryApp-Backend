@@ -5,6 +5,9 @@ const pengajuanBarangController = require('../../controllers/Pengajuan/pengajuan
 // Rute untuk menampilkan semua pengajuan barang
 router.get('/', pengajuanBarangController.getAllPengajuanBarang);
 
+// route mendapatkan jumlah pengaduan
+router.get('/count', pengajuanBarangController.countPengajuanBarang);
+
 // Rute untuk membuat pengajuan barang baru
 router.post('/tambah_pengajuan', pengajuanBarangController.createPengajuanBarang);
 
@@ -16,5 +19,6 @@ router.put('/edit/:id', pengajuanBarangController.updatePengajuanBarangById);
 
 // Rute untuk menghapus pengajuan barang berdasarkan ID
 router.delete('/delete/:id', pengajuanBarangController.deletePengajuanBarangById);
+
 
 module.exports = router;
