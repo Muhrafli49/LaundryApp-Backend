@@ -1,6 +1,7 @@
 const OrderExpress = require('../../models/Order/OrderPktExpress');
 const OrderReguler = require('../../models/Order/OrderPktReguler');
 const OrderSetrika = require('../../models/Order/OrderPktSetrika');
+const client = require('../../controllers/notificationsControllers');
 
 exports.getOrderById = async (req, res) => {
     const { id, type } = req.params;
@@ -50,5 +51,58 @@ exports.getTotalOrder = async (req, res) => {
             message: 'Error fetching total paket',
             error: error.message
         });
+    }
+};
+
+const formatPhoneNumber = (phoneNumber) => {
+    if (phoneNumber.startsWith('0')) {
+        return `62${phoneNumber.slice(1)}`;
+    }
+    return phoneNumber;
+};
+
+exports.sendNotification = async (req, res) => {
+    const { orderType, orderId } = req.params;
+
+    try {
+        let order;
+        switch (orderType) {
+            case 'exp':
+                order = await OrderExpress.findById(orderId.trim());
+                break;
+            case 'reg':
+                order = await OrderReguler.findById(orderId.trim());
+                break;
+            case 'str':
+                order = await OrderSetrika.findById(orderId.trim());
+                break;
+            default:
+                return res.status(400).json({ message: 'Invalid order type' });
+        }
+
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        if (order.status) {
+            const phoneNumber = formatPhoneNumber(order.nomorTeleponExp || order.nomorTeleponReg || order.nomorTeleponStr);
+            const customerName = order.namaPelangganExp || order.namaPelangganReg || order.namaPelangganStr;
+            const orderNumber = order.noOrderExp || order.noOrderReg || order.noOrderStr;
+
+            const message = `Halo ${customerName}, order Anda dengan nomor ${orderNumber} sudah selesai. Terima kasih! ~Bingo Laundry`;
+
+            client.sendMessage(`${phoneNumber}@c.us`, message).then(response => {
+                console.log('Message sent successfully:', response);
+                res.status(200).send('Notification sent successfully.');
+            }).catch(err => {
+                console.error('Failed to send message:', err);
+                res.status(500).send('Failed to send notification.');
+            });
+        } else {
+            res.status(400).send('Order status is not complete.');
+        }
+    } catch (error) {
+        console.error('Error fetching order:', error);
+        res.status(500).send('Error fetching order.');
     }
 };
