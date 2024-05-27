@@ -15,6 +15,8 @@ const routePaketExpress = require("./routes/Paket/PaketExpress");
 const routePaketReguler = require("./routes/Paket/PaketReguler");
 // import routes paket reguler
 const routePaketSetrika = require("./routes/Paket/PaketSetrika");
+// import routes pelanggan
+const routePelanggan = require("./routes/Pelanggan");
 // import routes order express
 const routeOrderExpress = require("./routes/Order/OrderExpress");
 // import routes order reguler
@@ -57,6 +59,9 @@ app.use('/pkt_reguler', routePaketReguler);
 
 // Paket Setrika
 app.use('/pkt_setrika', routePaketSetrika);
+
+// Pelanggan baru
+app.use('/pelanggan', routePelanggan);
 
 // Order Paket Express
 app.use('/order_exp', routeOrderExpress);
