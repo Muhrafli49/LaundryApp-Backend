@@ -32,15 +32,13 @@ const routeSeluruhOrder = require("./routes/Order/SeluruhOrder");
 // import routes pendapatan
 const routeTotalPendapatan = require("./routes/Order/TotalPendapatan");
 
-// import routes notifikasi
-// const routeNotifications = require("./routes/Notifications");
 
+app.use(cors({
+    origin: "laundry-app-backend-psi.vercel.app",
+    methods: ["POST", "GET", "DELETE", "PUT"],
+    credentials: true
+}));
 
-const corsOptions = {
-    origin: "*"
-};
-
-app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -87,17 +85,11 @@ app.use('/order', routeTotalPendapatan);
 // app.use('/notifications', routeNotifications);
 
 // Koneksi ke database
-connectionToDb()
-    .then(() => {
-        console.log("Connected to DB");
-        app.listen(port, () => {
-            console.log(`Server berjalan di http://localhost:${port}`);
-        });
-    })
-    .catch((err) => {
-        console.error("Failed to connect to DB", err);
-        process.exit(1); 
-    });
+connectionToDb();
+
+app.listen(port, () => {
+    console.log(`Server berjalan di http://localhost:${port}`);
+});
 
 
 
