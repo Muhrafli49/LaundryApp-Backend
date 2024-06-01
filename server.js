@@ -87,11 +87,17 @@ app.use('/order', routeTotalPendapatan);
 // app.use('/notifications', routeNotifications);
 
 // Koneksi ke database
-connectionToDb();
-
-app.listen(port, () => {
-    console.log(`Server berjalan di http://localhost:${port}`);
-});
+connectionToDb()
+    .then(() => {
+        console.log("Connected to DB");
+        app.listen(port, () => {
+            console.log(`Server berjalan di http://localhost:${port}`);
+        });
+    })
+    .catch((err) => {
+        console.error("Failed to connect to DB", err);
+        process.exit(1); 
+    });
 
 
 
