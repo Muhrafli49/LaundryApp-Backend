@@ -33,12 +33,11 @@ const routeSeluruhOrder = require("./routes/Order/SeluruhOrder");
 const routeTotalPendapatan = require("./routes/Order/TotalPendapatan");
 
 
-app.use(cors({
-    origin: "laundry-app-backend-psi.vercel.app",
-    methods: ["POST", "GET", "DELETE", "PUT"],
-    credentials: true
-}));
+const corsOptions = {
+    origin: "*"
+};
 
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
