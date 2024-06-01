@@ -1,0 +1,28 @@
+2024/06/01-14:54:52.682 3908 Reusing MANIFEST D:\Projek TA\Laundry-App\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2024/06/01-14:54:52.699 3908 Recovering log #1041
+2024/06/01-14:54:53.369 3908 Reusing old log D:\Projek TA\Laundry-App\backend\.wwebjs_auth\session\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/001041.log 
+2024/06/01-14:54:53.370 3908 Delete type=2 #1032
+2024/06/01-14:54:53.370 3908 Delete type=2 #1033
+2024/06/01-14:54:53.370 3908 Delete type=2 #1034
+2024/06/01-14:54:53.370 3908 Delete type=2 #1035
+2024/06/01-14:54:53.370 3908 Delete type=2 #1036
+2024/06/01-14:54:53.370 3908 Delete type=2 #1037
+2024/06/01-14:54:53.370 3908 Delete type=2 #1038
+2024/06/01-14:54:53.370 3908 Delete type=2 #1039
+2024/06/01-14:54:53.371 3908 Delete type=2 #1042
+2024/06/01-14:55:09.199 3908 Level-0 table #1053: started
+2024/06/01-14:55:09.267 3908 Level-0 table #1053: 1135829 bytes OK
+2024/06/01-14:55:09.269 3908 Delete type=0 #1041
+2024/06/01-14:55:09.272 3908 Compacting 1@1 + 4@2 files
+2024/06/01-14:55:09.593 3908 Generated table #1054@1: 76547 keys, 2296350 bytes
+2024/06/01-14:55:09.914 3908 Generated table #1055@1: 26584 keys, 2285400 bytes
+2024/06/01-14:55:10.271 3908 Generated table #1056@1: 24638 keys, 2267962 bytes
+2024/06/01-14:55:10.454 3908 Generated table #1057@1: 26500 keys, 2230697 bytes
+2024/06/01-14:55:10.465 3908 Generated table #1058@1: 744 keys, 90326 bytes
+2024/06/01-14:55:10.465 3908 Compacted 1@1 + 4@2 files => 9170735 bytes
+2024/06/01-14:55:10.466 3908 compacted to: files[ 0 0 9 0 0 0 0 ]
+2024/06/01-14:55:10.467 3908 Delete type=2 #1043
+2024/06/01-14:55:10.467 3908 Delete type=2 #1044
+2024/06/01-14:55:10.468 3908 Delete type=2 #1045
+2024/06/01-14:55:10.468 3908 Delete type=2 #1046
+2024/06/01-14:55:10.468 3908 Delete type=2 #1053
