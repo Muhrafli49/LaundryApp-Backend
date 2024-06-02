@@ -1,12 +1,11 @@
-// models/WWebJSSession.js
-
 const mongoose = require('mongoose');
 
-const WWebJSSessionSchema = new mongoose.Schema({
-    session: {
-        type: Object,
-        required: true
-    }
+const sessionSchema = new mongoose.Schema({
+    sessionId: { type: String, required: true },
+    sessionData: { type: Object, required: true },
+    qrCode: { type: String }
 });
 
-module.exports = mongoose.model('WWebJSSession', WWebJSSessionSchema);
+const Session = mongoose.model('Session', sessionSchema);
+
+module.exports = Session;
