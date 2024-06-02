@@ -1,0 +1,4 @@
+[0602/161611.464:WARNING:backend_impl.cc(1630)] Messed up entry found.
+[0602/161611.464:WARNING:backend_impl.cc(1826)] Destroying invalid entry.
+[0602/161619.545:INFO:CONSOLE(0)] "Uncaught (in promise) TimeoutError", source: https://web.whatsapp.com/WAWebWorker.5e22d5986b70580d0557.worker.js (0)
+[0602/161619.566:INFO:CONSOLE(0)] "Uncaught (in promise) TimeoutError", source: https://web.whatsapp.com/WAWebWorker.5e22d5986b70580d0557.worker.js (0)

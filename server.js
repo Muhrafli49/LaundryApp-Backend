@@ -6,6 +6,7 @@ const cors = require("cors");
 const port = process.env.PORT;
 const connectionToDb = require("./config/connectionToDb")
 const app = express();
+const checkLogin = require('./middleware/authMiddleware');
 
 // import routes user
 const routeUser = require("./routes/User");
@@ -49,36 +50,36 @@ app.get('/', (req, res) => {
 });
 
 // Paket Express
-app.use('/pkt_express', routePaketExpress);
+app.use('/pkt_express',checkLogin, routePaketExpress);
 
 // Paket Reguler
-app.use('/pkt_reguler', routePaketReguler);
+app.use('/pkt_reguler',checkLogin, routePaketReguler);
 
 // Paket Setrika
-app.use('/pkt_setrika', routePaketSetrika);
+app.use('/pkt_setrika',checkLogin, routePaketSetrika);
 
 // Pelanggan baru
-app.use('/pelanggan', routePelanggan);
+app.use('/pelanggan', checkLogin, routePelanggan);
 
 // Order Paket Express
-app.use('/order_exp', routeOrderExpress);
+app.use('/order_exp', checkLogin, routeOrderExpress);
 
 // Order Paket Reguler
-app.use('/order_reg', routeOrderReguler);
+app.use('/order_reg', checkLogin, routeOrderReguler);
 
 // Order Paket Setrika
-app.use('/order_str', routeOrderSetrika);
+app.use('/order_str', checkLogin, routeOrderSetrika);
 
 // Pengajuan Barang
-app.use('/pengajuan', routePengajuanBarang);
+app.use('/pengajuan', checkLogin, routePengajuanBarang);
 
 // Seluruh Paket
-app.use('/jumlah', routeSeluruhPaket);
+app.use('/jumlah', checkLogin, routeSeluruhPaket);
 
 // Seluruh Order
-app.use('/invoice', routeSeluruhOrder);
+app.use('/invoice', checkLogin, routeSeluruhOrder);
 
-app.use('/order', routeTotalPendapatan);
+app.use('/order', checkLogin, routeTotalPendapatan);
 
 // Notifikasi
 // app.use('/notifications', routeNotifications);

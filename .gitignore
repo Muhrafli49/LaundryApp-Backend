@@ -4,3 +4,5 @@ node_modules/
 # Ignore environment file
 .env
 
+# Ignore coverage folder
+.wwebjs_auth/

@@ -1,3 +1,5 @@
-2024/06/01-14:54:49.701 3908 Reusing MANIFEST D:\Projek TA\Laundry-App\backend\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
-2024/06/01-14:54:49.725 3908 Recovering log #23
-2024/06/01-14:54:49.725 3908 Reusing old log D:\Projek TA\Laundry-App\backend\.wwebjs_auth\session\Default\Local Storage\leveldb/000023.log 
+2024/06/02-16:15:58.731 5fc0 Reusing MANIFEST D:\Projek TA\Laundry-App\backend\.wwebjs_auth\session\Default\Local Storage\leveldb/MANIFEST-000001
+2024/06/02-16:15:58.732 5fc0 Recovering log #26
+2024/06/02-16:15:58.732 5fc0 Level-0 table #29: started
+2024/06/02-16:15:58.739 5fc0 Level-0 table #29: 14880 bytes OK
+2024/06/02-16:15:58.741 5fc0 Delete type=0 #26
