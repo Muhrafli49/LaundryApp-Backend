@@ -32,7 +32,8 @@ const routeSeluruhPaket = require("./routes/Paket/SeluruhPaket");
 const routeSeluruhOrder = require("./routes/Order/SeluruhOrder");
 // import routes pendapatan
 const routeTotalPendapatan = require("./routes/Order/TotalPendapatan");
-
+// import routes qr
+const routeQr = require("./routes/AuthNotification");
 
 const corsOptions = {
     origin: "*"
@@ -79,7 +80,11 @@ app.use('/jumlah', checkLogin, routeSeluruhPaket);
 // Seluruh Order
 app.use('/invoice', checkLogin, routeSeluruhOrder);
 
+// Total Pendapatan
 app.use('/order', checkLogin, routeTotalPendapatan);
+
+// // Menyimpan Qr
+app.use('/konfigurasi', checkLogin, routeQr);
 
 // Notifikasi
 // app.use('/notifications', routeNotifications);

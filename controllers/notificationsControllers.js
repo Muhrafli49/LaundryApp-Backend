@@ -1,13 +1,12 @@
-// whatsappClient.js
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const mongoose = require('mongoose');
 const qrcode = require('qrcode-terminal');
 const Session = require('../models/wwebJsesion'); 
 require('dotenv').config();
 
-const wwebVersion = '2.2412.54';
+const wwebVersion = '2.2412.54'; 
 
-// Koneksi ke MongoDB
+// Menghubungkan ke MongoDB
 mongoose.connect(process.env.DB_URL);
 
 const client = new Client({
@@ -27,7 +26,7 @@ const client = new Client({
             },
         },
     }),
-    puppeteer: {}, // Konfigurasi puppeteer sesuai kebutuhan Anda
+    puppeteer: {},
     webVersionCache: {
         type: 'remote',
         remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,

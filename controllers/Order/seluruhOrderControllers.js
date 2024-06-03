@@ -91,15 +91,18 @@ exports.sendNotification = async (req, res) => {
 
             const message = `Halo ${customerName}, order Anda dengan nomor ${orderNumber} sudah selesai. Terima kasih! ~Bingo Laundry`;
 
-            // Menggunakan async/await untuk mengirim pesan
-            const response = await client.sendMessage(`${phoneNumber}@c.us`, message);
-            console.log('Message sent successfully:', response);
-            res.status(200).send('Notification sent successfully.');
+            client.sendMessage(`${phoneNumber}@c.us`, message).then(response => {
+                console.log('Message sent successfully:', response);
+                res.status(200).send('Notification sent successfully.');
+            }).catch(err => {
+                console.error('Failed to send message:', err);
+                res.status(500).send('Failed to send notification.');
+            });
         } else {
             res.status(400).send('Order status is not complete.');
         }
     } catch (error) {
-        console.error('Error fetching or sending order notification:', error);
-        res.status(500).send('Failed to send notification.');
+        console.error('Error fetching order:', error);
+        res.status(500).send('Error fetching order.');
     }
 };
