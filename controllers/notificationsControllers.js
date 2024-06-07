@@ -26,7 +26,10 @@ const client = new Client({
             },
         },
     }),
-    puppeteer: {},
+    puppeteer: {
+        headless: true, // Jalankan dalam mode headless
+        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Opsi tambahan Puppeteer
+    },
     webVersionCache: {
         type: 'remote',
         remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
