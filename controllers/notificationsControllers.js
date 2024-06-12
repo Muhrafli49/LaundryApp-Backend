@@ -1,64 +1,32 @@
-const { Client, LocalAuth} = require('whatsapp-web.js'); 
-const mongoose = require('mongoose');
+const { Client, LocalAuth } = require('whatsapp-web.js');
+// const mongoose = require('mongoose');
 const qrcode = require('qrcode-terminal');
-const Session = require('../models/wwebJsesion'); 
+// const Session = require('../models/wwebJsesion');
 require('dotenv').config();
-const wwebVersion = '2.2412.54'; 
+const wwebVersion = '2.2412.54';
 
-// Menghubungkan ke MongoDB
-mongoose.connect(process.env.DB_URL);
+let latestQRCode = '';
 
 const client = new Client({
-    authStrategy: new LocalAuth({
-        clientId: 'client-one',
-        store: {
-            save: async (session) => {
-                await Session.findOneAndUpdate(
-                    { sessionId: 'client-one' },
-                    { sessionId: 'client-one', sessionData: session },
-                    { upsert: true }
-                );
-            },
-            load: async () => {
-                const session = await Session.findOne({ sessionId: 'client-one' });
-                return session ? session.sessionData : null;
-            },
-        },
-    }),
+    authStrategy: new LocalAuth(),
     puppeteer: {
-        headless: true, // Jalankan dalam mode headless
-        args: ['--no-sandbox', '--disable-setuid-sandbox'] // Opsi tambahan Puppeteer
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
     },
     webVersionCache: {
         type: 'remote',
-        remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
+        remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`, 
     },
 });
 
-client.on('ready', () => {
-    console.log('Client is ready!');
-});
-
-client.on('qr', async (qr) => {
-    console.log('QR code received, please scan:');
-    qrcode.generate(qr, { small: true });
-
-    await Session.findOneAndUpdate(
-        { sessionId: 'client-one' },
-        { qrCode: qr },
-        { upsert: true }
-    );
-});
-
-client.on('qrRefresh', qr => {
-    console.log('QR code refreshed, please scan again:');
-    qrcode.generate(qr, { small: true });
-});
-
-        client.on('message', message => {
-            console.log('Message received:', message.body);
+async function generateQRCode(data) {
+    return new Promise((resolve, reject) => {
+        qrcode.generate(data, { small: true }, (qrcode) => {
+            resolve(qrcode);
+        }, (error) => {
+            reject(error);
         });
+    });
+}
 
-    client.initialize();
-    
-    module.exports = client;
+module.exports = { client, generateQRCode };

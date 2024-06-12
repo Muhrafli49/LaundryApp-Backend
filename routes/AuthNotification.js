@@ -1,24 +1,45 @@
 const express = require('express');
 const router = express.Router();
-const qrcode = require('qrcode');
-const Session = require('../models/wwebJsesion'); 
+// const { Client, LocalAuth } = require('whatsapp-web.js');
+const { client, generateQRCode } = require('../controllers/notificationsControllers');
+// const qrcode = require('qrcode');
 require('dotenv').config();
 
-// Endpoint untuk mendapatkan QR code dalam format base64
+
+
 router.get('/qr-code', async (req, res) => {
     try {
-        const session = await Session.findOne({ sessionId: 'client-one' });
-        if (session && session.qrCode) {
-            // Konversi QR code menjadi base64
-            const base64QR = await qrcode.toDataURL(session.qrCode);
-            res.status(200).send(base64QR);
-        } else {
-            res.status(404).send('QR code not found');
-        }
+        client.getState('connection').then(connectionStatus => {
+            if (connectionStatus !== 'CONNECTED') {
+                client.on('qr', async (qr) => {
+                    try {
+                        const qrcodeData = await generateQRCode(qr);
+                        res.send(`<div id="qrcode-container"><pre>${qrcodeData}</pre></div>`);
+                    } catch (error) {
+                        console.error(error);
+                        res.status(500).send('Internal Server Error');
+                    } finally {
+                        client.removeAllListeners('qr');
+                    }
+                });
+            } else {
+                res.send(`<div id="success-message">You are now logged in! Connection Status: ${JSON.stringify(connectionStatus)}</div>`);
+                console.log(`QR Code scanned successfully. You are now authenticated. Connection Status: ${connectionStatus}`);
+            }
+        });
     } catch (error) {
-        console.error('Error fetching QR code:', error);
-        res.status(500).send('Internal server error');
+        res.send(`<div id="error-message">Error: ${error.message}</div>`);
     }
 });
+
+client.on('authenticated', (session) => {
+    console.log(`You are now authenticated. Session: ${JSON.stringify(session)}`);
+});
+
+client.on('ready', () => {
+    console.log('Client is ready!');
+});
+
+client.initialize();
 
 module.exports = router;

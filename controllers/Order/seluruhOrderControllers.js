@@ -1,7 +1,8 @@
 const OrderExpress = require('../../models/Order/OrderPktExpress');
 const OrderReguler = require('../../models/Order/OrderPktReguler');
 const OrderSetrika = require('../../models/Order/OrderPktSetrika');
-const client = require('../../controllers/notificationsControllers');
+const { client } = require('../../controllers/notificationsControllers');
+// const Session = require('../../models/wwebJsesion');
 
 exports.getOrderById = async (req, res) => {
     const { id, type } = req.params;
@@ -61,6 +62,7 @@ const formatPhoneNumber = (phoneNumber) => {
     return phoneNumber;
 };
 
+
 exports.sendNotification = async (req, res) => {
     const { orderType, orderId } = req.params;
 
@@ -91,9 +93,10 @@ exports.sendNotification = async (req, res) => {
 
             const message = `Halo ${customerName}, order Anda dengan nomor ${orderNumber} sudah selesai. Terima kasih! ~Bingo Laundry`;
 
-            if (!client || !client.info || !client.info.wid) {
-                return res.status(500).send('Client is not ready');
-            }
+            // // Fetch the session based on sessionId 'client-one'
+            // if (!client || !client.info || !client.info.wid) {
+            //     return res.status(500).send('Client is not ready');
+            // }
 
             client.sendMessage(`${phoneNumber}@c.us`, message).then(response => {
                 console.log('Message sent successfully:', response);
@@ -106,7 +109,7 @@ exports.sendNotification = async (req, res) => {
             res.status(400).send('Order status is not complete.');
         }
     } catch (error) {
-        console.error('Error fetching order:', error);
-        res.status(500).send('Error fetching order.');
+        console.error('Error fetching order or session:', error);
+        res.status(500).send('Error fetching order or session.');
     }
 };
