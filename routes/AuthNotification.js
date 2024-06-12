@@ -11,7 +11,7 @@ router.get('/qr-code', async (req, res) => {
         if (session && session.qrCode) {
             // Konversi QR code menjadi base64
             const base64QR = await qrcode.toDataURL(session.qrCode);
-            res.send(base64QR);
+            res.status(200).send(base64QR);
         } else {
             res.status(404).send('QR code not found');
         }

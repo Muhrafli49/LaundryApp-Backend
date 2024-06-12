@@ -86,7 +86,7 @@ exports.login = async (req, res) => {
         };
 
         // Membuat token JWT
-        const token = jsonwebtoken.sign(data, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jsonwebtoken.sign(data, process.env.JWT_SECRET, { expiresIn: '12h' });
 
         return res.status(200).json({
             success: true,

@@ -1,9 +1,8 @@
-const { Client, LocalAuth } = require('whatsapp-web.js');
+const { Client, LocalAuth} = require('whatsapp-web.js'); 
 const mongoose = require('mongoose');
 const qrcode = require('qrcode-terminal');
 const Session = require('../models/wwebJsesion'); 
 require('dotenv').config();
-
 const wwebVersion = '2.2412.54'; 
 
 // Menghubungkan ke MongoDB
@@ -56,10 +55,10 @@ client.on('qrRefresh', qr => {
     qrcode.generate(qr, { small: true });
 });
 
-client.on('message_create', message => {
-    console.log(message.body);
-});
+        client.on('message', message => {
+            console.log('Message received:', message.body);
+        });
 
-client.initialize();
-
-module.exports = client;
+    client.initialize();
+    
+    module.exports = client;

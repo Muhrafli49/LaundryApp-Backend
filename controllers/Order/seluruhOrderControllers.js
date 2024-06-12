@@ -91,6 +91,10 @@ exports.sendNotification = async (req, res) => {
 
             const message = `Halo ${customerName}, order Anda dengan nomor ${orderNumber} sudah selesai. Terima kasih! ~Bingo Laundry`;
 
+            if (!client || !client.info || !client.info.wid) {
+                return res.status(500).send('Client is not ready');
+            }
+
             client.sendMessage(`${phoneNumber}@c.us`, message).then(response => {
                 console.log('Message sent successfully:', response);
                 res.status(200).send('Notification sent successfully.');
