@@ -1,8 +1,7 @@
 const OrderExpress = require('../../models/Order/OrderPktExpress');
 const OrderReguler = require('../../models/Order/OrderPktReguler');
 const OrderSetrika = require('../../models/Order/OrderPktSetrika');
-const { client } = require('../../controllers/notificationsControllers');
-// const Session = require('../../models/wwebJsesion');
+const { eventEmitter, socket, formatPhoneNumber, kirimPesan } = require('../notificationsControllers');
 
 exports.getOrderById = async (req, res) => {
     const { id, type } = req.params;
@@ -40,7 +39,7 @@ exports.getTotalOrder = async (req, res) => {
         const setrikaCount = await OrderSetrika.countDocuments();
 
         res.json({
-            success: true, 
+            success: true,
             message: 'Total Orderan setiap paket',
             totalExp: expressCount,
             totalReg: regulerCount,
@@ -55,13 +54,13 @@ exports.getTotalOrder = async (req, res) => {
     }
 };
 
-const formatPhoneNumber = (phoneNumber) => {
-    if (phoneNumber.startsWith('0')) {
-        return `62${phoneNumber.slice(1)}`;
+eventEmitter.on('connectionStatus', (status) => {
+    if (status === 'ready') {
+        console.log('WhatsApp siap untuk mengirim notifikasi.');
+    } else if (status === 'disconnected') {
+        console.log('Koneksi WhatsApp terputus.');
     }
-    return phoneNumber;
-};
-
+});
 
 exports.sendNotification = async (req, res) => {
     const { orderType, orderId } = req.params;
@@ -86,30 +85,28 @@ exports.sendNotification = async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
 
+        const phoneNumber = formatPhoneNumber(order.nomorTeleponExp || order.nomorTeleponReg || order.nomorTeleponStr);
+        const customerName = order.namaPelangganExp || order.namaPelangganReg || order.namaPelangganStr;
+        const orderNumber = order.noOrderExp || order.noOrderReg || order.noOrderStr;
+        const sisaTagihan = order.totalBayarExp || order.totalBayarReg || order.totalBayarStr;
+
+        let message;
         if (order.status) {
-            const phoneNumber = formatPhoneNumber(order.nomorTeleponExp || order.nomorTeleponReg || order.nomorTeleponStr);
-            const customerName = order.namaPelangganExp || order.namaPelangganReg || order.namaPelangganStr;
-            const orderNumber = order.noOrderExp || order.noOrderReg || order.noOrderStr;
-
-            const message = `Halo ${customerName}, order Anda dengan nomor ${orderNumber} sudah selesai. Terima kasih! ~Bingo Laundry`;
-
-            // // Fetch the session based on sessionId 'client-one'
-            // if (!client || !client.info || !client.info.wid) {
-            //     return res.status(500).send('Client is not ready');
-            // }
-
-            client.sendMessage(`${phoneNumber}@c.us`, message).then(response => {
-                console.log('Message sent successfully:', response);
-                res.status(200).send('Notification sent successfully.');
-            }).catch(err => {
-                console.error('Failed to send message:', err);
-                res.status(500).send('Failed to send notification.');
-            });
+            message = `Halo ${customerName}, order Anda dengan nomor ${orderNumber} sudah selesai, dan siap diambil.\nStatus: Lunas\nSisa Tagihan: Rp. 0, -\n---------------------------\n~Bingo Laundry\nTerimakasih atas kunjungan anda ☺`;
         } else {
-            res.status(400).send('Order status is not complete.');
+            message = `Halo ${customerName}, order Anda dengan nomor ${orderNumber} sudah selesai, dan siap diambil.\nStatus: Belum lunas\nSisa tagihan: Rp. ${sisaTagihan.toLocaleString('id-ID')},-.\n---------------------------\n~Bingo Laundry\nTerimakasih atas kunjungan anda ☺`;
         }
+
+        // try {
+        await kirimPesan(`${phoneNumber}@s.whatsapp.net`, message);
+        res.status(200).send('Notification sent successfully.');
+        // } catch (err) {
+        //     console.error('Failed to send message:', err);
+        //     res.status(500).send('Failed to send notification.');
+        // }
     } catch (error) {
         console.error('Error fetching order or session:', error);
         res.status(500).send('Error fetching order or session.');
     }
 };
+

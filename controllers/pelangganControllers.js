@@ -104,3 +104,21 @@ exports.deletePelangganById = async (req, res) => {
 }
 
 
+// Menghitung semua jumlah pelanggan
+exports.getTotalPelanggan = async (req, res) => {
+    try {
+        const count = await Pelanggan.countDocuments();
+
+        res.status(200).json({
+            success: true,
+            message: 'Jumlah pelanggan',
+            data: count
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching total pelanggan',
+            error: error.message
+        });
+    }
+};    
